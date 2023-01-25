@@ -1,0 +1,27 @@
+
+function MyComponent() {
+  return <h1>hello world</h1>
+}
+
+export function App{
+    return(
+        <div className='black'>i am in the app component 
+        <MyComponent/>
+        </div>
+    )
+}
+
+
+export function App() {
+  const [count, setCount] = useState(0);
+  return(
+    <div>
+      {count}
+      <div>
+        <button onClick = {() => setCount(count +1)}>Increment</button>
+        <button onClick = {() => setCount(count-1)}>Decrement</button>
+        {/* <button onClick = {setCount((current) => current + 1)}></button> */}
+      </div>
+    </div>
+    );
+}
