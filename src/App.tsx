@@ -1,6 +1,7 @@
 import { SyntheticEvent, useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
+// import styles from './App.module.css'
 import { SignUpPage } from './pages/SignUpPage';
 
 interface Quote {
@@ -12,11 +13,25 @@ interface Quote {
 export function App() {
   const [quote, setQuote] = useState<Quote | null>(null); //null for object types 
   const [author, setAuthor] = useState("");
+  const [quotes, setQuotes] = useState<Quote[]>([]);
+  let hasSearched = false;
 
   async function search(e: SyntheticEvent) {
+    hasSearched = true;
+    let quoteList: Quote[] = [];
     e.preventDefault();
     const result = await fetch(`https://usu-quotes-mimic.vercel.app/api/search?query=${author}`);
-    setQuote(await result.json());
+    const json = await result.json();
+    for (const i of await json.results) {
+      const quote: Quote = {
+        _id: i._id,
+        content: i.content,
+        author: i.author,
+      };
+      quoteList.push(quote);
+    }
+    setQuotes(quoteList);
+    console.log(await quotes);
   }
 
   async function loadRandom() {
@@ -29,9 +44,16 @@ export function App() {
     loadRandom();
   }, []);
 
+  function setDisplay(){
+    if (hasSearched) {
+      return;
+    }
+    return ;
+  }
+
   return(
     <div>
-      <form >
+      <form>
         <h2> The Quote Searcher-ma-tron </h2>
         <br></br>
         <input
@@ -40,12 +62,23 @@ export function App() {
           value={author}
           onChange={e => setAuthor(e.target.value)}
         />
+        <br></br>
         <button 
           className='cool'
           type='submit'
           onClick={search}>Search
         </button>
       </form>
+      <div id="outer-div" className='container'>
+        {
+          quotes.map((q) => (
+            <div key={q._id} className="quote">
+              {q.content}
+              <div>-{q.author}</div>
+            </div>
+          ))
+        }
+      </div>
     </div>
     );
 }
