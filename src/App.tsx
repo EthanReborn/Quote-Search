@@ -1,4 +1,4 @@
-import { SyntheticEvent, useState, useEffect } from 'react'
+import { SyntheticEvent, useState, useEffect, Component } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 // import styles from './App.module.css'
@@ -14,12 +14,11 @@ export function App() {
   const [quote, setQuote] = useState<Quote | null>(null); //null for object types 
   const [author, setAuthor] = useState("");
   const [quotes, setQuotes] = useState<Quote[]>([]);
-  let hasSearched = false;
+  const [hasSearched, setHasSearched] = useState(true);
 
   async function search(e: SyntheticEvent) {
-    hasSearched = true;
-    let quoteList: Quote[] = [];
     e.preventDefault();
+    let quoteList: Quote[] = [];
     const result = await fetch(`https://usu-quotes-mimic.vercel.app/api/search?query=${author}`);
     const json = await result.json();
     for (const i of await json.results) {
@@ -44,11 +43,19 @@ export function App() {
     loadRandom();
   }, []);
 
-  function setDisplay(){
-    if (hasSearched) {
-      return;
+  function SetDisplay(){
+    if (quote !== null && quote.author == "") quote.author = "unknown";
+
+    if (random) {
+      if (quote !== null) return <div className='quote'> <div> {quote.content} </div> <div> -{quote.author}</div> </div>;
+    } else {
+      return (quotes.map((q) => (
+          <div key={q._id} className="quote">
+            {q.content}
+            <div>-{q.author}</div>
+          </div>
+        )));
     }
-    return ;
   }
 
   return(
@@ -70,13 +77,14 @@ export function App() {
         </button>
       </form>
       <div id="outer-div" className='container'>
+        {SetDisplay()}
         {
-          quotes.map((q) => (
-            <div key={q._id} className="quote">
-              {q.content}
-              <div>-{q.author}</div>
-            </div>
-          ))
+          // quotes.map((q) => (
+          //   <div key={q._id} className="quote">
+          //     {q.content}
+          //     <div>-{q.author}</div>
+          //   </div>
+          // ))
         }
       </div>
     </div>

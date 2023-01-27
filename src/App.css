@@ -55,6 +55,7 @@ input {
   width: fit-content;
   word-break: break-word;
   border: 0;
+  margin: 8px;
 }
 
 .logo {
