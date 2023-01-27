@@ -2,7 +2,6 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center;
 }
 
 .black {
@@ -10,21 +9,27 @@
 }
 
 .quote {
-  box-sizing: border-box;
-  width: clamp(200px, 90%, 800px);
+  /* box-sizing: border-box; */
+  width: clamp(200px, 50%, 800px);
   border: 3px solid green;
+  text-align: center;
   border-radius: 30px;
   color: white;
   margin: 8px 0;
   padding: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 .container {
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
-  /* flex-direction: column; */
+}
+
+form {
+  align-items: center;
 }
 
 input {

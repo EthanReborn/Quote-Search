@@ -14,9 +14,10 @@ export function App() {
   const [quote, setQuote] = useState<Quote | null>(null); //null for object types 
   const [author, setAuthor] = useState("");
   const [quotes, setQuotes] = useState<Quote[]>([]);
-  const [hasSearched, setHasSearched] = useState(true);
+  const [hasSearched, setHasSearched] = useState(false);
 
   async function search(e: SyntheticEvent) {
+    setHasSearched(true);
     e.preventDefault();
     let quoteList: Quote[] = [];
     const result = await fetch(`https://usu-quotes-mimic.vercel.app/api/search?query=${author}`);
@@ -34,33 +35,27 @@ export function App() {
   }
 
   async function loadRandom() {
-      const result = await fetch("https://usu-quotes-mimic.vercel.app/api/random");
-      setQuote(await result.json());
-      console.log("random called")
+    const result = await fetch("https://usu-quotes-mimic.vercel.app/api/random");
+    setQuote(await result.json());
+    console.log("random called");
   }
 
   useEffect (() => {
     loadRandom();
   }, []);
 
-  function SetDisplay(){
-    if (quote !== null && quote.author == "") quote.author = "unknown";
-
-    if (random) {
-      if (quote !== null) return <div className='quote'> <div> {quote.content} </div> <div> -{quote.author}</div> </div>;
-    } else {
-      return (quotes.map((q) => (
-          <div key={q._id} className="quote">
-            {q.content}
-            <div>-{q.author}</div>
-          </div>
-        )));
-    }
+  function SearchResults(){
+    return (quotes.map((q) => (
+        <div key={q._id} className="quote">
+          {q.content}
+          <div>-{q.author}</div>
+        </div>
+      )));
   }
 
   return(
     <div>
-      <form>
+      <form className='container'>
         <h2> The Quote Searcher-ma-tron </h2>
         <br></br>
         <input
@@ -77,17 +72,8 @@ export function App() {
         </button>
       </form>
       <div id="outer-div" className='container'>
-        {SetDisplay()}
-        {
-          // quotes.map((q) => (
-          //   <div key={q._id} className="quote">
-          //     {q.content}
-          //     <div>-{q.author}</div>
-          //   </div>
-          // ))
-        }
+        {hasSearched ? SearchResults() : <div className='quote'>{quote?.content} <br></br>-{quote?.author}</div>} 
       </div>
     </div>
     );
 }
-//useState is a hook
