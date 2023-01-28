@@ -15,6 +15,7 @@ export function App() {
   const [author, setAuthor] = useState("");
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
+  const className = hasSearched ? "top-container" : "center-container";
 
   async function search(e: SyntheticEvent) {
     setHasSearched(true);
@@ -31,13 +32,11 @@ export function App() {
       quoteList.push(quote);
     }
     setQuotes(quoteList);
-    console.log(await quotes);
   }
 
   async function loadRandom() {
     const result = await fetch("https://usu-quotes-mimic.vercel.app/api/random");
     setQuote(await result.json());
-    console.log("random called");
   }
 
   useEffect (() => {
@@ -55,7 +54,7 @@ export function App() {
 
   return(
     <div>
-      <form className='container'>
+      <form className={className}>
         <h2> The Quote Searcher-ma-tron </h2>
         <br></br>
         <input
