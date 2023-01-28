@@ -1,8 +1,6 @@
 import { SyntheticEvent, useState, useEffect, Component } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
-// import styles from './App.module.css'
-import { SignUpPage } from './pages/SignUpPage';
 
 interface Quote {
   _id: string
